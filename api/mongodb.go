@@ -17,12 +17,12 @@ func (self MongoDB[Schema]) Find(c context.Context, query any) (result []Schema,
     return
 }
 
-func (self MongoDB[Schema]) Add(c context.Context, addition Schema) (ε ε) {
-    _, ε = self.collectionHandle.InsertOne(c, addition); return
-}
-
 func (self MongoDB[Schema]) Edit(c context.Context, query any, change Schema) (ε ε) {
     _, ε = self.collectionHandle.UpdateOne(c, query, change); return
+}
+
+func (self MongoDB[Schema]) Add(c context.Context, addition Schema) (ε ε) {
+    _, ε = self.collectionHandle.InsertOne(c, addition); return
 }
 
 func (self MongoDB[Schema]) Remove(c context.Context, query any) (ε ε) {

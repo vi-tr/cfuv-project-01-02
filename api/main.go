@@ -44,7 +44,7 @@ type privs struct {
     Teacher bool
 }
 
-func get_priv(c context.Context, RequesterID uint64, RequestedID uint64) (p privs, ε ε) {
+func getPriv(c context.Context, RequesterID uint64, RequestedID uint64) (p privs, ε ε) {
     list := P2(UsersDB.Find(c, User{GitHubID: RequesterID}))
     if len(list) > 1 {
         log.Fatal(fmt.Sprintf("More than one user has the ID: %v",RequesterID))
@@ -138,7 +138,7 @@ func modifyLesson(c context.Context, group string, day uint64, period uint64, b 
     defer ə(&ε)
     var body LessonRequest
     P1(json.NewDecoder(b).Decode(&body))
-    priv := P2(get_priv(c, body.RequesterID, uint64(0)))
+    priv := P2(getPriv(c, body.RequesterID, uint64(0)))
     if priv.Admin {
         ScheduleDB.Edit(c, Lesson{Group: group, Day: day, Period: period}, body.Change)
     } else if priv.Teacher {

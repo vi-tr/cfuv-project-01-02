@@ -14,8 +14,8 @@ import (
 
 type DBProvider[Schema any] interface {
     Find  (c context.Context, query any) (result []Schema, ε ε)
-    Add   (c context.Context, addition Schema) (ε ε)
     Edit  (c context.Context, query any, change Schema) (ε ε)
+    Add   (c context.Context, addition Schema) (ε ε)
     Remove(c context.Context, query any) (ε ε)
 }
 
