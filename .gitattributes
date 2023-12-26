@@ -1,0 +1,8 @@
+* text=auto eol=lf
+*.bat eol=crlf
+
+# Funny
+**/*.v linguist-language=go
+**/*.vv linguist-language=go
+**/*.vsh linguist-language=go
+**/v.mod linguist-language=go

@@ -1,0 +1,54 @@
+version: '3.1'
+
+services:
+  # Database
+  mongo-db:
+    image: mongo
+    command: --port 27017
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: "${MONGODB_PASSWORD:-debug}"
+
+  api-server:
+    build: ./api
+    read_only: true
+    #restart: always
+    profiles: ["debug"]
+    environment:
+      MONGODB_URI: "mongodb://root:${MONGODB_PASSWORD:-debug}@127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=api"
+    depends_on:
+      - mongo-db
+
+  web-server:
+    build: ./web
+    read_only: true
+    #restart: always
+    profiles: ["debug"]
+    #ports:
+    #  - "8080:8080"
+    depends_on:
+      - api-server
+
+  auth-server:
+    build: ./oauth
+    read_only: true
+    #restart: always
+    profiles: ["debug"]
+    #ports:
+    #  - "8080:8081"
+    environment:
+      GITHUB_SECRET_ID: "${GITHUB_SECRET_ID}"
+      GITHUB_CLIENT_ID: "${GITHUB_CLIENT_ID}"
+    depends_on:
+      - api-server
+
+  telegram-bot:
+    build: ./tg
+    read_only: true
+    profiles: ["debug"]
+    #restart: always
+    environment:
+      TELEGRAM_TOKEN: "${TELEGRAM_TOKEN}"
+    depends_on:
+      - api-server

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Админ панель</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            align-items: center;
+        }
+
+        .left-column {
+            flex: 2;
+            padding: 20px;
+            overflow: auto;
+        }
+
+        .center-column {
+            border-left: 1px dotted #000;
+            border-right: 1px dotted #000;
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .right-column {
+            flex: 2;
+            padding: 20px;
+            overflow: auto;
+        }
+
+        /* Style the user list as a table */
+        .user-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .user-list li {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        /* Add hover effect for clickable users */
+        .user-list li:hover {
+            background-color: #f5f5f5;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-column">
+            <textarea rows="10" cols="40" placeholder="System logs..."></textarea>
+        </div>
+        <div class="center-column">
+            <pre id="center"> Тут информация </pre>
+        </div>
+        <div class="right-column">
+            <ul class="user-list">
+                <li class="users">Администратор "Админ" Администраторович</li>
+                <li class="users">Ученик Ученикович</li>
+                <li class="users">Учитель Профессорович</li>
+            </ul>
+        </div>
+    </div>
+    <script>
+        let current = window.location;
+        let ws_uri = (current.protocol === "https:" ? "wss:" : "ws:") + "//" + current.host + "/admin-ws";
+        const socket = new WebSocket(ws_uri);
+        socket.addEventListener('open', (event) => {
+            console.log('WebSocket connection established.');
+        });
+        socket.addEventListener('message', (event) => {
+                const userList = JSON.parse(event.data);
+                // Update user list UI here
+                // ...
+        });
+
+
+
+        for (const user of document.getElementsByClassName("users")) {
+            user.addEventListener("click", () => {
+                document.getElementById("center").innerHTML = JSON.stringify({
+                    "name": user.innerHTML,
+                    "group": "ПИ-б-о-231",
+                    "roles": {
+                        "admin":   user.innerHTML.slice(0,4) == "Адми",
+                        "teacher": user.innerHTML.slice(0,4) == "Учит",
+                    },
+                    "GithubID": ({
+                        "Адми": 2,
+                        "Учит": 3,
+                        "Учен": 4,
+                    })[user.innerHTML.slice(0,4)],
+                    "TelegramIDs": ({
+                        "Адми": [5],
+                        "Учит": [6],
+                        "Учен": [7],
+                    })[user.innerHTML.slice(0,4)],
+                });
+            });
+        }
+        //document.getElementById('disconnectButton').addEventListener('click', () => {
+        //    const userId = 'user123';
+        //    const disconnectMessage = { action: 'disconnect', userId };
+        //    socket.send(JSON.stringify(disconnectMessage));
+        //});
+    </script>
+</body>
+</html>

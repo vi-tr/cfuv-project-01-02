@@ -1,0 +1,34 @@
+*
+!*.*
+!*/
+!deps/*
+!LICENSE
+!README
+!Dockerfile
+
+# Isn't useful for git since submodules are really just files, but may be
+# useful for some tools that read .gitignore, like ripgrep and fd-find.
+deps/*/
+
+*.out
+*.exe
+*.exe~
+*.so
+*.dylib
+*.dll
+
+*/build/
+*/bin/
+build/
+bin/
+
+secrets/
+*.nix
+.old.git
+
+.DS_Store
+.idea/
+.vscode/
+*.iml
+
+.env
