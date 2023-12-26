@@ -6,10 +6,6 @@
 !README
 !Dockerfile
 
-# Isn't useful for git since submodules are really just files, but may be
-# useful for some tools that read .gitignore, like ripgrep and fd-find.
-deps/*/
-
 *.out
 *.exe
 *.exe~
